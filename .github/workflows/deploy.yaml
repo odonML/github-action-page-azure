@@ -1,0 +1,29 @@
+name: deploy
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: instalar dependencias
+        run: npm install
+
+      - name: run test
+        run: npm run test
+
+      - name: deploy in azure
+        run: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrect.TOKEN_AZURE }}
+          app_location: "public"
+          deployment_action: "upload"
