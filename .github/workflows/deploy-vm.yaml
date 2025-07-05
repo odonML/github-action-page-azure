@@ -1,6 +1,10 @@
 name: deploy
 
-on: push
+on:
+  push:
+    branches:
+      - main
+      - stage
 
 jobs:
   build:
@@ -18,5 +22,10 @@ jobs:
       - name: create file
         run: ssh -o StrictHostKeyChecking=no azureuser@20.84.42.99 touch hola.txt
 
-      - name: create file
-        run: bash deploy.sh
+      - name: deploy main
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: bash deploy.sh main
+
+      - name: deploy stage
+        if: ${{ github.ref == 'refs/heads/stage' }}
+        run: bash deploy.sh stage
